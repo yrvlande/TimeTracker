@@ -1,0 +1,10 @@
+server:
+  port: 8087
+
+spring:
+  application:
+    name: Time Tracker
+#  data:
+#    cassandra:
+#      contact-points: localhost:9042
+#      keyspace-name: timeTracker
