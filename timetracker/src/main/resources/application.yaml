@@ -4,7 +4,20 @@ server:
 spring:
   application:
     name: Time Tracker
-#  data:
-#    cassandra:
-#      contact-points: localhost:9042
-#      keyspace-name: timeTracker
+  data:
+    cassandra:
+      contact-points: localhost:9042
+      keyspace-name: timeTracker
+      localDataCenter: datacenter1
+      ssl: false
+      username: NO_LOCAL_USERNAME
+      truststore: NO_LOCAL_TRUSTSTORE
+      truststorePassword: NO_LOCAL_TRUSTSTORE_PASSWORD
+      password: NO_LOCAL_PASSWORD
+      request:
+        timeout: 3s
+
+cassandra:
+  migration:
+    keyspace-name: timeTracker
+    consistency-level: local_one
