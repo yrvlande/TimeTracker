@@ -7,3 +7,12 @@ services:
       hostname: cassandra
       ports:
        - "9042:9042"
+   
+   so1:
+     image: ${SPLUNK_IMAGE:-splunk/splunk:latest}
+     container_name: so1
+     environment:
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_PASSWORD=dauntless@2022
+     ports:
+      - 8021:8000   
