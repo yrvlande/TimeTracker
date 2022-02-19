@@ -5,13 +5,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.sql.Timestamp;
 
 public class EventData {
+    private long id;
     private String userId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "Asia/Kolkata")
     private Timestamp mouseClickTime;
-
     private int xCoordinate;
     private int yCoordinate;
+    private Timestamp insertedOn;
+
 
     public String getUserId() {
         return userId;
@@ -45,13 +47,31 @@ public class EventData {
         this.yCoordinate = yCoordinate;
     }
 
+    public Timestamp getInsertedOn() {
+        return insertedOn;
+    }
+
+    public void setInsertedOn(Timestamp insertedOn) {
+        this.insertedOn = insertedOn;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "EventData{" +
-                "userId='" + userId + '\'' +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
                 ", mouseClickTime=" + mouseClickTime +
                 ", xCoordinate=" + xCoordinate +
                 ", yCoordinate=" + yCoordinate +
+                ", insertedOn=" + insertedOn +
                 '}';
     }
 }
