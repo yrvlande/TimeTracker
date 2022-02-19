@@ -2,3 +2,4 @@ pynput
 requests
 wheel
 Cqlsh
+pymongo
