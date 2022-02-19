@@ -5,8 +5,14 @@ import requests
 
 
 def publishData():
-    requestJson = {"id": 6, "userId": "e1078064", "mouseClickTime": "2022-02-17T13:10:17", "xCoordinate": 10,
-                   "yCoordinate": 11}
+    with open("mouse_log.txt", "r") as file:
+        for last_line in file:
+            pass
+    trimmed = last_line.strip()
+    spiltedstampandcoord = trimmed.split("&")
+    coordinates = spiltedstampandcoord[1].strip().split(":")
+    requestJson = {"userId": "e1078064", "mouseClickTime": spiltedstampandcoord[0], "xCoordinate": coordinates[0],
+                   "yCoordinate": coordinates[1]}
     try:
         response = requests.post("http://localhost:8087/event/data", json=requestJson)
         print(response.status_code)
@@ -15,7 +21,7 @@ def publishData():
         print("Connection Refused")
 
 
-schedule.every(10).seconds.do(publishData)
+schedule.every(1).seconds.do(publishData)
 
 while True:
     schedule.run_pending()
