@@ -12,7 +12,7 @@ public class EventData {
     private Timestamp mouseClickTime;
     private int xCoordinate;
     private int yCoordinate;
-    private Timestamp insertedOn;
+
 
 
     public String getUserId() {
@@ -47,14 +47,6 @@ public class EventData {
         this.yCoordinate = yCoordinate;
     }
 
-    public Timestamp getInsertedOn() {
-        return insertedOn;
-    }
-
-    public void setInsertedOn(Timestamp insertedOn) {
-        this.insertedOn = insertedOn;
-    }
-
     public long getId() {
         return id;
     }
@@ -71,7 +63,6 @@ public class EventData {
                 ", mouseClickTime=" + mouseClickTime +
                 ", xCoordinate=" + xCoordinate +
                 ", yCoordinate=" + yCoordinate +
-                ", insertedOn=" + insertedOn +
                 '}';
     }
 }

@@ -7,6 +7,8 @@ import com.fis.timetracker.repository.TimeEventRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+
 @Service
 public class PersistTimeEvent {
 
@@ -31,7 +33,7 @@ public class PersistTimeEvent {
         timeEvent.setxCoordinate(eventData.getxCoordinate());
         timeEvent.setyCoordinate(eventData.getyCoordinate());
         timeEvent.setMouseClickTime(eventData.getMouseClickTime());
-        timeEvent.setInsertedOn(eventData.getInsertedOn());
+        timeEvent.setInsertedOn(new Timestamp(System.currentTimeMillis()));
         return timeEvent;
     }
 }
