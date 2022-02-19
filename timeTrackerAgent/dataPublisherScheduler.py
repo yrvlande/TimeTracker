@@ -13,6 +13,7 @@ def publishData():
     coordinates = spiltedstampandcoord[1].strip().split(":")
     requestJson = {"userId": "e1078064", "mouseClickTime": spiltedstampandcoord[0], "xCoordinate": coordinates[0],
                    "yCoordinate": coordinates[1]}
+    print(requestJson)
     try:
         response = requests.post("http://localhost:8087/event/data", json=requestJson)
         print(response.status_code)

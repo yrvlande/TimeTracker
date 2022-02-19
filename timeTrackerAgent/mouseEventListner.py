@@ -1,7 +1,7 @@
 from pynput.mouse import Listener
 import logging
 
-logging.basicConfig(filename="mouse_log.txt", level=logging.DEBUG, format='%(asctime)s&%(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+logging.basicConfig(filename="mouse_log.txt", level=logging.DEBUG, format='%(asctime)s&%(message)s', datefmt='%Y-%m-%dT%H:%M:%S')
 
 
 def on_move(x, y):
