@@ -1,5 +1,5 @@
-pynput
-requests
-wheel
-Cqlsh
-pymongo
+pynput==1.7.6
+requests==2.27.1
+wheel==0.37.1
+Cqlsh==6.0.0
+pymongo==4.0.1
