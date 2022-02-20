@@ -3,3 +3,4 @@ requests==2.27.1
 wheel==0.37.1
 Cqlsh==6.0.0
 pymongo==4.0.1
+schedule==1.1.0
