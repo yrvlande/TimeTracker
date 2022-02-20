@@ -22,7 +22,7 @@ def publishData():
         print("Connection Refused")
 
 
-schedule.every(1).seconds.do(publishData)
+schedule.every(10).seconds.do(publishData)
 
 while True:
     schedule.run_pending()
