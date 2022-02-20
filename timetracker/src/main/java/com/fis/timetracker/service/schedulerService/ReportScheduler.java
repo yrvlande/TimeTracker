@@ -1,52 +1,52 @@
 package com.fis.timetracker.service.schedulerService;
 
 import com.fis.timetracker.entity.TimeEvent;
+import com.fis.timetracker.entity.UserSessionDetail;
 import com.fis.timetracker.repository.TimeEventRepository;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import com.fis.timetracker.service.dbService.PersistUserSessionDetails;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
 public class ReportScheduler {
     private final TimeEventRepository timeEventRepository;
+    private  final PersistUserSessionDetails persistUserSessionDetails;
 
-    public ReportScheduler(TimeEventRepository timeEventRepository) {
+    public ReportScheduler(TimeEventRepository timeEventRepository, PersistUserSessionDetails persistUserSessionDetails) {
         this.timeEventRepository = timeEventRepository;
+        this.persistUserSessionDetails = persistUserSessionDetails;
     }
 
-    @Scheduled( cron = "*/59 * * * * *")
+    @Scheduled( cron = "*/20 * * * * *")
     public void generateReport() throws ParseException {
-        long totalMinutes = 1440;
+        long totalDayMinutes = 1440;
 
-        LocalDate localDate = LocalDate.now();
-        localDate = localDate.minusDays(0);
+        LocalDate currentDate = LocalDate.now();
+        currentDate = currentDate.minusDays(1);
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Timestamp startTimeStamp = new Timestamp(formatter.parse( localDate.toString() +" 00:00:01").getTime() + TimeUnit.HOURS.toMillis(5) + TimeUnit.MINUTES.toMillis(30));
-        Timestamp endTimeStamp = new Timestamp(formatter.parse( localDate.toString() +" 23:59:59").getTime() + TimeUnit.HOURS.toMillis(5) + TimeUnit.MINUTES.toMillis(30));
-        List<TimeEvent> useIds = timeEventRepository.getUserIds();
+        Timestamp startTimeStamp = new Timestamp(formatter.parse( currentDate.toString() +" 00:00:01").getTime() + TimeUnit.HOURS.toMillis(5) + TimeUnit.MINUTES.toMillis(30));
+        Timestamp endTimeStamp = new Timestamp(formatter.parse( currentDate.toString() +" 23:59:59").getTime() + TimeUnit.HOURS.toMillis(5) + TimeUnit.MINUTES.toMillis(30));
+        List<TimeEvent> userIds = timeEventRepository.getUserIds();
 
-        for (TimeEvent userId : useIds) {
-            long calculatedMinutes = 0;
+        for (TimeEvent userId : userIds) {
+            long effectiveWorkingMinutes = 0;
             List<TimeEvent> timeEvents = timeEventRepository.getClickInfo( userId.getUserId(), startTimeStamp, endTimeStamp );
-             TimeEvent firstEvent = timeEvents.get(0);
-             Timestamp firstTimeStamp = firstEvent.getMouseClickTime();
-             long difference = firstTimeStamp.getTime() - startTimeStamp.getTime();
-            difference = (difference/1000)/60;
-              if (difference >= 6)
-                   calculatedMinutes = totalMinutes - difference;
+             TimeEvent firstClickEvent = timeEvents.get(0);
+             Timestamp firstClickTimestamp = firstClickEvent.getMouseClickTime();
+             long dayStartToLoginDifference = firstClickTimestamp.getTime() - startTimeStamp.getTime();
+            dayStartToLoginDifference = (dayStartToLoginDifference/1000)/60;
+              if (dayStartToLoginDifference >= 6)
+                  effectiveWorkingMinutes = totalDayMinutes - dayStartToLoginDifference;
 
               for (int i = 0; i < timeEvents.size()-1; i++) {
                   Timestamp first = timeEvents.get(i).getMouseClickTime();
@@ -54,7 +54,7 @@ public class ReportScheduler {
                   long diff = second.getTime() - first.getTime();
                   diff = (diff/1000)/60;
                   if (diff >= 6) {
-                      calculatedMinutes = calculatedMinutes - diff;
+                      effectiveWorkingMinutes = effectiveWorkingMinutes - diff;
                   }
 
               }
@@ -63,12 +63,24 @@ public class ReportScheduler {
             lastDifference = (lastDifference/1000)/60;
 
             if (lastDifference >= 6) {
-                calculatedMinutes = calculatedMinutes - lastDifference;
+                effectiveWorkingMinutes = effectiveWorkingMinutes - lastDifference;
             }
-
-
+            int activeHours = (int)effectiveWorkingMinutes/60;
+            UserSessionDetail userSessionDetail =  userSessionDetailEntityMapper(userId.getUserId(), currentDate,  firstClickTimestamp, lastTimestamp, activeHours);
+            persistUserSessionDetails.persistUserSessionDetails(userSessionDetail);
         }
+    }
 
+    private UserSessionDetail userSessionDetailEntityMapper(String userId, LocalDate businessDate, Timestamp userLoggedIn,
+                                                            Timestamp userLoggedOut, int activeHours) {
+        UserSessionDetail userSessionDetail = new UserSessionDetail();
+        userSessionDetail.setUserId(userId);
+        userSessionDetail.setBusinessDate(businessDate);
+        userSessionDetail.setActiveHours(activeHours);
+        userSessionDetail.setUserLoggedIn(userLoggedIn);
+        userSessionDetail.setUserLoggedOut(userLoggedOut);
+        userSessionDetail.setInsertedOn(new Timestamp(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(5) + TimeUnit.MINUTES.toMillis(30)));
+        return  userSessionDetail;
 
     }
 }
