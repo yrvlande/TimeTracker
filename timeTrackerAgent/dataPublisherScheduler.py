@@ -3,26 +3,36 @@ import schedule
 import time
 import requests
 
-
+lastSentData = ''
+isDataPublishOFF = False
 def publishData():
     with open("mouse_log.txt", "r") as file:
         for last_line in file:
             pass
-    trimmed = last_line.strip()
-    spiltedstampandcoord = trimmed.split("&")
-    coordinates = spiltedstampandcoord[1].strip().split(":")
-    requestJson = {"userId": "e1078064", "mouseClickTime": spiltedstampandcoord[0], "xCoordinate": coordinates[0],
-                   "yCoordinate": coordinates[1]}
-    print(requestJson)
-    try:
-        response = requests.post("http://localhost:8087/event/data", json=requestJson)
-        print(response.status_code)
-        print(response.json())
-    except:
-        print("Connection Refused")
+    trimmedLastLine = last_line.strip()
+    global lastSentData, isDataPublishOFF
+    print('Pre--' + lastSentData)
+    print('isDataPublishOFF=', isDataPublishOFF)
+    if not trimmedLastLine.__eq__(lastSentData) or not isDataPublishOFF:
+        print(isDataPublishOFF, " Working")
+        print('lastSentData=' + lastSentData + ' and ' + 'trimmedLastLine=' + trimmedLastLine)
+        spiltedstampandcoord = trimmedLastLine.split("&")
+        coordinates = spiltedstampandcoord[1].strip().split(":")
+        requestJson = {"userId": "e1078064", "mouseClickTime": spiltedstampandcoord[0], "xCoordinate": coordinates[0], "yCoordinate": coordinates[1]}
+        if trimmedLastLine.__eq__(lastSentData):
+            isDataPublishOFF = True
+        else:
+            isDataPublishOFF = False
+        lastSentData = trimmedLastLine
+        try:
+            response = requests.post("http://localhost:8087/event/data", json=requestJson)
+            print(response.status_code)
+            print(response.json())
+        except:
+            print("Connection Refused")
 
 
-schedule.every(10).seconds.do(publishData)
+schedule.every(3).seconds.do(publishData)
 
 while True:
     schedule.run_pending()
