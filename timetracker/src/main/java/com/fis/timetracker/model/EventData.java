@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.sql.Timestamp;
 
 public class EventData {
-    private long id;
     private String userId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "Asia/Kolkata")
@@ -47,19 +46,10 @@ public class EventData {
         this.yCoordinate = yCoordinate;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     @Override
     public String toString() {
         return "EventData{" +
-                "id=" + id +
-                ", userId='" + userId + '\'' +
+                "userId='" + userId + '\'' +
                 ", mouseClickTime=" + mouseClickTime +
                 ", xCoordinate=" + xCoordinate +
                 ", yCoordinate=" + yCoordinate +

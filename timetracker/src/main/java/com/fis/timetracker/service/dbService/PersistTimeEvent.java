@@ -20,15 +20,24 @@ public class PersistTimeEvent {
 
     @Transactional
     public TimeEvent saveTimeEvent(EventData eventData) {
-           TimeEvent timeEvent = timeEventEntityMapper(eventData);
+           TimeEvent timeEvent = null;
+           Long maxId = timeEventRepository.getMaxId();
+           if (maxId == null) {
+               timeEvent = timeEventEntityMapper(eventData,0);
+           } else {
+               timeEvent = timeEventEntityMapper(eventData, maxId + 1);
+              ;
+           }
            timeEventRepository.save(timeEvent);
             return timeEvent;
     }
 
 
-    private TimeEvent timeEventEntityMapper(EventData eventData) {
+
+
+    private TimeEvent timeEventEntityMapper(EventData eventData, long id) {
         TimeEvent timeEvent = new TimeEvent();
-        timeEvent.setId(eventData.getId());
+        timeEvent.setId(id);
         timeEvent.setUserId(eventData.getUserId());
         timeEvent.setxCoordinate(eventData.getxCoordinate());
         timeEvent.setyCoordinate(eventData.getyCoordinate());
