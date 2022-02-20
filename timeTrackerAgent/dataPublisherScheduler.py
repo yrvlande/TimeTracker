@@ -2,6 +2,7 @@
 import schedule
 import time
 import requests
+import os
 
 lastSentData = ''
 isDataPublishOFF = False
@@ -18,7 +19,7 @@ def publishData():
         print('lastSentData=' + lastSentData + ' and ' + 'trimmedLastLine=' + trimmedLastLine)
         spiltedstampandcoord = trimmedLastLine.split("&")
         coordinates = spiltedstampandcoord[1].strip().split(":")
-        requestJson = {"userId": "e1078064", "mouseClickTime": spiltedstampandcoord[0], "xCoordinate": coordinates[0], "yCoordinate": coordinates[1]}
+        requestJson = {"userId": os.getlogin(), "mouseClickTime": spiltedstampandcoord[0], "xCoordinate": coordinates[0], "yCoordinate": coordinates[1]}
         if trimmedLastLine.__eq__(lastSentData):
             isDataPublishOFF = True
         else:
