@@ -42,7 +42,7 @@ public class ReportScheduler {
         long totalDayMinutes = 1440;
 
         LocalDate currentDate = LocalDate.now();
-        //currentDate = currentDate.minusDays(1);
+        currentDate = currentDate.minusDays(1);
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Timestamp startTimeStamp = new Timestamp(formatter.parse( currentDate.toString() +" 00:00:01").getTime() + TimeUnit.HOURS.toMillis(5) + TimeUnit.MINUTES.toMillis(30));
         Timestamp endTimeStamp = new Timestamp(formatter.parse( currentDate.toString() +" 23:59:59").getTime() + TimeUnit.HOURS.toMillis(5) + TimeUnit.MINUTES.toMillis(30));
