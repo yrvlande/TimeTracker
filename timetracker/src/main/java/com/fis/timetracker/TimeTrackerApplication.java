@@ -2,8 +2,13 @@ package com.fis.timetracker;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
+import javax.annotation.PostConstruct;
+import java.util.TimeZone;
 
 @SpringBootApplication
+@EnableScheduling
 public class TimeTrackerApplication {
 
 	public static void main(String[] args) {
