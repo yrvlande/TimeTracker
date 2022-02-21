@@ -3,13 +3,22 @@ import schedule
 import time
 import requests
 import os
+import atexit
+
 
 lastSentData = ''
 def publishData():
-    with open("event_log.txt", "r") as file:
-        for last_line in file:
-            pass
-    trimmedLastLine = last_line.strip()
+    trimmedLastLine = ''
+    with open("mouse_log.txt", "r") as file:
+        try:
+            for last_line in file:
+                pass
+            trimmedLastLine = last_line.strip()
+        except:
+            print("File is empty. Event Listener is not started yet.")
+        finally:
+            file.close()
+
     global lastSentData
     print('lastSentData=' + lastSentData + ' and ' + 'trimmedLastLine=' + trimmedLastLine)
     if not trimmedLastLine.__eq__(lastSentData):
@@ -27,12 +36,11 @@ def publishData():
 
 
 def clean_file():
-    print("A Day Only")
-    open("event_log.txt", "r+").truncate(0)
+    open("mouse_log.txt", "r+").truncate(0)
 
 
-schedule.every(20).seconds.do(publishData)
-
+schedule.every(5).minutes.do(publishData)
+atexit.register(clean_file)
 
 while True:
     schedule.run_pending()
