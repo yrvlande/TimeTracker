@@ -3,7 +3,7 @@ userId text,
 businessDate date,
 userLoggedIn timestamp,
 userLoggedOut timestamp,
-activeHours int,
+activeHours float,
 insertedOn timestamp,
 PRIMARY KEY(userId, businessDate )
 )WITH CLUSTERING ORDER BY (businessDate ASC);

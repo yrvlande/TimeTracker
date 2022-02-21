@@ -19,7 +19,7 @@ public class UserSessionDetail {
     @Column("userLoggedOut")
     private Timestamp userLoggedOut;
     @Column("activeHours")
-    private int activeHours;
+    private float activeHours;
     @Column("insertedOn")
     private Timestamp insertedOn;
 
@@ -55,11 +55,11 @@ public class UserSessionDetail {
         this.userLoggedOut = userLoggedOut;
     }
 
-    public int getActiveHours() {
+    public float getActiveHours() {
         return activeHours;
     }
 
-    public void setActiveHours(int activeHours) {
+    public void setActiveHours(float activeHours) {
         this.activeHours = activeHours;
     }
 

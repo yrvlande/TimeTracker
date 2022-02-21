@@ -29,7 +29,6 @@ public class PersistTimeEvent {
                timeEvent = timeEventEntityMapper(eventData,0);
            } else {
                timeEvent = timeEventEntityMapper(eventData, maxId + 1);
-              ;
            }
            return timeEventRepository.save(timeEvent);
 
