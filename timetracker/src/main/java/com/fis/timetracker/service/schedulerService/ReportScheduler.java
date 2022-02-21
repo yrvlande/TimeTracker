@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -42,7 +43,7 @@ public class ReportScheduler {
         long totalDayMinutes = 1440;
 
         LocalDate currentDate = LocalDate.now();
-        currentDate = currentDate.minusDays(1);
+        currentDate = currentDate.minusDays(0);
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Timestamp startTimeStamp = new Timestamp(formatter.parse( currentDate.toString() +" 00:00:01").getTime() + TimeUnit.HOURS.toMillis(5) + TimeUnit.MINUTES.toMillis(30));
         Timestamp endTimeStamp = new Timestamp(formatter.parse( currentDate.toString() +" 23:59:59").getTime() + TimeUnit.HOURS.toMillis(5) + TimeUnit.MINUTES.toMillis(30));
@@ -90,12 +91,18 @@ public class ReportScheduler {
                 if (lastDifference >= 6) {
                     effectiveWorkingMinutes = effectiveWorkingMinutes - lastDifference;
                 }
-                float activeHours = (float)effectiveWorkingMinutes/60;
+                DecimalFormat df = new DecimalFormat("#.##");
+                float activeHoursUnFormatted = (float)effectiveWorkingMinutes/60;
+                Float activeHours = Float.parseFloat(df.format(activeHoursUnFormatted));
+
                 UserSessionDetail userSessionDetail =  userSessionDetailEntityMapper(userId.getUserId(), currentDate,  firstClickTimestamp, lastTimestamp, activeHours);
                 persistUserSessionDetails.persistUserSessionDetails(userSessionDetail);
                 logger.info(new LogBuilder()
-                        .message("User " + userId.getUserId() + " was active for " + activeHours + " hours on " + currentDate.toString()
-                                + ", User logged in at " + firstClickTimestamp.toString() + " and logged out at " + lastTimestamp)
+                        .userId(userId.getUserId())
+                        .activeHours(String.valueOf(activeHours))
+                        .businessDate(currentDate.toString())
+                        .loggedInTime(firstClickTimestamp.toString())
+                        .loggedOutTime(lastTimestamp.toString())
                         .logEvent("UserSessionDetailsPersisted")
                         .toString());
             }
