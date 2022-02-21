@@ -42,6 +42,31 @@ public class LogBuilder {
         return this;
     }
 
+    public LogBuilder activeHours(String activeHours) {
+        details.put("activeHours", activeHours);
+        return this;
+    }
+
+    public LogBuilder businessDate(String businessDate) {
+        details.put("businessDate", businessDate);
+        return this;
+    }
+
+    public LogBuilder userId(String userId) {
+        details.put("userId", userId);
+        return this;
+    }
+
+    public LogBuilder loggedInTime(String loggedInTime) {
+        details.put("loggedInTime", loggedInTime);
+        return this;
+    }
+
+    public LogBuilder loggedOutTime(String loggedOutTime) {
+        details.put("loggedOutTime", loggedOutTime);
+        return this;
+    }
+
     public String toString() {
         return details.toString();
     }
