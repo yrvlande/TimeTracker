@@ -1,4 +1,5 @@
-from pynput.mouse import Listener
+from pynput.mouse import Listener as MouseListener
+from pynput.keyboard import Listener as KeyboardListener
 import logging
 
 logging.basicConfig(filename="mouse_log.txt", level=logging.DEBUG, format='%(asctime)s&%(message)s', datefmt='%Y-%m-%dT%H:%M:%S')
@@ -17,5 +18,13 @@ def on_scroll(x, y):
     logging.info('{0}:{1}'.format(x, y))
 
 
-with Listener(on_click=on_click) as listener:
-    listener.join()
+def on_press(key):
+    logging.info('0:0')
+
+
+keyboard_listener = KeyboardListener(on_press=on_press)
+mouse_listener = MouseListener(on_click=on_click)
+keyboard_listener.start()
+mouse_listener.start()
+keyboard_listener.join()
+mouse_listener.join()
