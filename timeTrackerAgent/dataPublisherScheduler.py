@@ -39,7 +39,7 @@ def clean_file():
     open("mouse_log.txt", "r+").truncate(0)
 
 
-schedule.every(3).seconds.do(publishData)
+schedule.every(5).minute.do(publishData)
 atexit.register(clean_file)
 
 while True:
