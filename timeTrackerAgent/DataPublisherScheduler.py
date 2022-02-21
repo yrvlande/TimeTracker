@@ -9,7 +9,7 @@ import atexit
 lastSentData = ''
 def publishData():
     trimmedLastLine = ''
-    with open("mouse_log.txt", "r") as file:
+    with open("event_log.txt", "r") as file:
         try:
             for last_line in file:
                 pass
@@ -36,7 +36,7 @@ def publishData():
 
 
 def clean_file():
-    open("mouse_log.txt", "r+").truncate(0)
+    open("event_log.txt", "r+").truncate(0)
 
 
 schedule.every(5).minutes.do(publishData)

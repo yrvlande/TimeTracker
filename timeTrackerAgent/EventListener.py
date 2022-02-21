@@ -3,7 +3,7 @@ from pynput.keyboard import Listener as KeyboardListener
 import logging
 
 
-logging.basicConfig(filename="mouse_log.txt", level=logging.DEBUG, format='%(asctime)s&%(message)s', datefmt='%Y-%m-%dT%H:%M:%S')
+logging.basicConfig(filename="event_log.txt", level=logging.DEBUG, format='%(asctime)s&%(message)s', datefmt='%Y-%m-%dT%H:%M:%S')
 
 
 def on_move(x, y):
