@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 public class EventData {
     private String userId;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "Asia/Kolkata")
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "Asia/Kolkata")
     private Timestamp mouseClickTime;
     private int xCoordinate;
     private int yCoordinate;

@@ -1,0 +1,44 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<configuration debug="true">
+
+    <property name="PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS, UTC+00} %-5level %logger %msg %replace(%ex){'[\r\n\t]+', ' \\\\n '}%nopex%n"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout>
+            <Pattern>${PATTERN}</Pattern>
+        </layout>
+    </appender>
+
+    <!-- Only used when running locally. So that the local component tests can work. -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>log/time_tracker.log</file>
+        <append>false</append>  <!-- Clear the log file everytime the application starts. -->
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.fis.timetracker" level="INFO" additivity="false">
+        <if condition='isDefined("KUBERNETES_PORT")'>
+            <then>
+                <appender-ref ref="CONSOLE"/>
+            </then>
+            <else>
+                <appender-ref ref="CONSOLE"/>
+                <appender-ref ref="FILE"/>
+            </else>
+        </if>
+    </logger>
+    <root level="INFO">
+        <if condition='isDefined("KUBERNETES_PORT")'>
+            <then>
+                <appender-ref ref="CONSOLE"/>
+            </then>
+            <else>
+                <appender-ref ref="CONSOLE"/>
+                <appender-ref ref="FILE"/>
+            </else>
+        </if>
+    </root>
+</configuration>
