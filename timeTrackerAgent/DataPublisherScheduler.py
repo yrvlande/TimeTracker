@@ -6,7 +6,7 @@ import os
 
 lastSentData = ''
 def publishData():
-    with open("mouse_log.txt", "r") as file:
+    with open("event_log.txt", "r") as file:
         for last_line in file:
             pass
     trimmedLastLine = last_line.strip()
@@ -28,7 +28,7 @@ def publishData():
 
 def clean_file():
     print("A Day Only")
-    open("mouse_log.txt", "r+").truncate(0)
+    open("event_log.txt", "r+").truncate(0)
 
 
 schedule.every(20).seconds.do(publishData)
